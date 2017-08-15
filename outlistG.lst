@@ -1,0 +1,215 @@
+  1:  ;-------------------------------------------------------------------------------
+  2:  ;   Test source code for Advanced Microcontroller Software 
+  3:  ;
+  4:  ;    Filename: TestSourceCodeG.s43
+  5:  ;
+  6:  ;   Purpose:  To provide test code for the class Assembler Project
+  7:  ;
+  8:  ;   Target: TI MSP430 family - simulation
+  9:  ;
+ 10:  ;       Date:           Aug 8, 2017
+ 11:  ;       Last Revision:  1.0  
+ 12:  ;                       
+ 13:  ;       Written by:     Dr. Michael Helm, ECE dept, Texas Tech University
+ 14:  ;       Adapted from:   earlier example code
+ 15:  ;       Assembler/IDE:  class assembler project
+ 16:  ;
+ 17:  ;       HW I/O assignments: none assigned for this example
+ 18:  ;-------------------------------------------------------------------------------
+ 19:  ; Definition of Constants
+ 20:  ;-------------------------------------------------------------------------------
+ 21:  ; Watchdog timer definitions
+ 22:  WDTCTL     EQU     0x0120
+ 23:  P1DIR      EQU     0x0022
+ 24:  P1OUT      EQU     0x0021
+ 25:  P1REN      EQU     0x0027
+ 26:  DELAY_VALUE  EQU   0xEFFF
+ 27:  
+ 28:  ;-------------------------------------------------------------------------------
+ 29:  ; Definition of Variables
+ 30:  ;-------------------------------------------------------------------------------
+ 31:  
+ 32:  0200                                   ORG   0x0200     ; beginning of RAM space 
+ 33:  0200                   LoopCount       DB    0
+ 34:  0201                   Count           DB    0
+ 35:  0202                   BigVar          DW    0    
+ 36:  0204                   BufferB         DS    10
+ 37:  
+ 38:  ;-------------------------------------------------------------------------------
+ 39:  C000                               ORG     0xC000                  ; Program Reset (prog memory start)
+ 40:                                              ; this is Program memory start 
+ 41:                                              ; address for MSP430G2553 (16K)
+ 42:  ;-------------------------------------------------------------------------------
+ 43:  C000  31400004     RESET       mov.w   #0x0400, SP       ; Initialize stackpointer(to end of RAM +1)
+ 44:                                       ; RAM is 512 bytes, last position is 3FFh
+ 45:                                       
+ 46:  C004  B040805A2001 StopWDT     mov.w   #0x5A80, &WDTCTL  ; Stop WDT (Watchdog timer)
+ 47:  
+ 48:  C00A  F04041002200 SetupP1     mov.b   #0x41, &P1DIR
+ 49:  C010  F04004002700             mov.b   #0x04, &P1REN
+ 50:  C016  F04004002100             mov.b   #0x04, &P1OUT
+ 51:              
+ 52:  ;initialize BufferB
+ 53:  C01C  3F401000                 mov #BufferB, R15
+ 54:  C020  E04F2100                 mov.b @R15, &P1OUT  ;see what first byte was before clearing            
+ 55:  C024  3E401000                 mov #10, R14
+ 56:  C028  FF4000000000 Top         mov.b #0, 0(R15)
+ 57:  C02E  0E43                     dec  R14
+ 58:  C030  F623                     jnz  Top
+ 59:              
+ 60:  C032  E04F2100                 mov.b @R15, &P1OUT            
+ 61:  
+ 62:  C036                   MainProgramStart
+ 63:  C036  F0D041002100             bis.b   #0x41, &P1OUT
+ 64:  C03C  31124EC0                 call #Delay_Long
+ 65:  
+ 66:  C040  F0C041002100             bic.b   #0x41, &P1OUT
+ 67:  C046  31124EC0                 call #Delay_Long           
+ 68:  
+ 69:  C04A  EA27                     jz      MainProgramStart
+ 70:  C04C  E823                     jnz     MainProgramStart            
+ 71:                          
+ 72:                                        
+ 73:  ;-------------------------------------------------------------------------------
+ 74:  ;           End of main code
+ 75:  ;-------------------------------------------------------------------------------                    76:                           
+ 77:                                             
+ 78:  ;-------------------------------------------------------------------------------
+ 79:  ;           Subroutines
+ 80:  ;------------------------------------------------------------------------------- 
+ 81:  C04E                   Delay_Long
+ 82:  C04E  0F12                     push  R15
+ 83:  C050  3F40FFEF     Again       mov     #DELAY_VALUE, R15
+ 84:  C054  0F43         LoopTop     dec     R15
+ 85:  C056  D023                     jnz     LoopTop
+ 86:  C058  3F41                     pop  R15
+ 87:  C05A  0013                     ret
+ 88:  
+ 89:  ;-------------------------------------------------------------------------------
+ 90:  ;           End of all Subroutines
+ 91:  ;-------------------------------------------------------------------------------
+ 92:  
+ 93:  
+ 94:  ;-------------------------------------------------------------------------------
+ 95:  ;           Definition of Program Data Memory 
+ 96:  ;-------------------------------------------------------------------------------
+ 97:  
+ 98:  ;none used here
+ 99:  
+100:  ;-------------------------------------------------------------------------------
+101:  ;           Interrupt Vectors
+102:  ;-------------------------------------------------------------------------------
+103:  
+104:  FFFE                               ORG     0xFFFE                  ; MSP430 RESET Vector
+105:  FFFE                               DW      RESET                   ; establishes the label RESET as 
+106:                                              ; the starting point
+107:                                              
+108:  ;-------------------------------------------------------------------------------                   109:                           
+110:  10000                               END                             ; END of all code for this program
+111:  ;-------------------------------------------------------------------------------
+112:  ;-------------------------------------------------------------------------------
+
+                               LIST OF SYMBOYS
+============================================================================
+SYMBOL                               TYPE                   VALUE
+----------------------------------------------------------------------------
+WDTCTL                               Constant               0x0120
+P1DIR                                Constant               0x0022
+P1OUT                                Constant               0x0021
+P1REN                                Constant               0x0027
+DELAY_VALUE                          Constant               0xEFFF
+LoopCount                            DB                     0
+Count                                DB                     0
+BigVar                               Address                202
+BufferB                              DS                     10
+RESET                                Address                C000
+StopWDT                              Address                C004
+SetupP1                              Address                C00A
+Top                                  Address                C028
+MainProgramStart                     Address                C036
+Delay_Long                           Address                C04E
+Again                                Address                C050
+LoopTop                              Address                C054
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            

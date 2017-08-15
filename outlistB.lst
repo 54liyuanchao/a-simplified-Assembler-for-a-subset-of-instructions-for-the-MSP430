@@ -1,0 +1,200 @@
+  1:  ;-------------------------------------------------------------------------------
+  2:  ;   Test source code for Advanced Microcontroller Software 
+  3:  ;
+  4:  ;    Filename: TestSourceCodeB.s43
+  5:  ;
+  6:  ;   Purpose:  To provide test code for the class Assembler Project
+  7:  ;
+  8:  ;   Target: TI MSP430 family - simulation
+  9:  ;
+ 10:  ;       Date:           Aug 8, 2017
+ 11:  ;       Last Revision:  1.0  
+ 12:  ;                       
+ 13:  ;       Written by:     Dr. Michael Helm, ECE dept, Texas Tech University
+ 14:  ;       Adapted from:   earlier example code
+ 15:  ;       Assembler/IDE:  class assembler project
+ 16:  ;
+ 17:  ;       HW I/O assignments: none assigned for this example
+ 18:  ;-------------------------------------------------------------------------------
+ 19:  ; Definition of Constants
+ 20:  ;-------------------------------------------------------------------------------
+ 21:  ; Watchdog timer definitions
+ 22:  WDTCTL     EQU     0x0120
+ 23:  P1DIR      EQU     0x0022
+ 24:  P1OUT      EQU     0x0021
+ 25:  P1REN      EQU     0x0027
+ 26:  
+ 27:  ;-------------------------------------------------------------------------------
+ 28:  ; Definition of Variables
+ 29:  ;-------------------------------------------------------------------------------
+ 30:  
+ 31:  0200                                   ORG   0x0200     ; beginning of RAM space 
+ 32:  0200                   LoopCount       DB    0
+ 33:  0201                   Count           DB    0
+ 34:  0202                   BigVar          DW    0                               
+ 35:  
+ 36:  ;-------------------------------------------------------------------------------
+ 37:  C000                               ORG     0xC000                  ; Program Reset (prog memory start)
+ 38:                                              ; this is Program memory start 
+ 39:                                              ; address for MSP430G2553 (16K)
+ 40:  ;-------------------------------------------------------------------------------
+ 41:  C000  31400004     RESET       mov.w   #0x0400, SP       ; Initialize stackpointer(to end of RAM +1)
+ 42:                                       ; RAM is 512 bytes, last position is 3FFh
+ 43:                                       
+ 44:  C004  B040805A2001 StopWDT     mov.w   #0x5A80, &WDTCTL  ; Stop WDT (Watchdog timer)
+ 45:  
+ 46:  C00A  F04041002200 SetupP1     mov.b   #0x41, &P1DIR
+ 47:  C010  F04004002700             mov.b   #0x04, &P1REN
+ 48:  C016  F04004002100             mov.b   #0x04, &P1OUT
+ 49:  
+ 50:  C01C                   MainProgramStart
+ 51:  C01C  F0D041002100             bis.b   #0x41, &P1OUT
+ 52:  C022  3F40FFEF     Again       mov     #0xEFFF, R15
+ 53:  C026  0F43         LoopTop     dec     R15
+ 54:  C028  FC23                     jnz     LoopTop
+ 55:              
+ 56:  C02A  F0C041002100             bic.b   #0x41, &P1OUT
+ 57:  C030  3F40FFEF     AgainA      mov     #0xEFFF, R15
+ 58:  C034  0F43         LoopTopA    dec     R15
+ 59:  C036  EE23                     jnz     LoopTopA
+ 60:  C038  E227                     jz      MainProgramStart
+ 61:                          
+ 62:                                        
+ 63:  ;-------------------------------------------------------------------------------
+ 64:  ;           End of main code
+ 65:  ;-------------------------------------------------------------------------------                    66:                           
+ 67:                                             
+ 68:  ;-------------------------------------------------------------------------------
+ 69:  ;           Subroutines
+ 70:  ;------------------------------------------------------------------------------- 
+ 71:  
+ 72:  ; none used here
+ 73:  
+ 74:  ;-------------------------------------------------------------------------------
+ 75:  ;           End of all Subroutines
+ 76:  ;-------------------------------------------------------------------------------
+ 77:  
+ 78:  
+ 79:  ;-------------------------------------------------------------------------------
+ 80:  ;           Definition of Program Data Memory 
+ 81:  ;-------------------------------------------------------------------------------
+ 82:  
+ 83:  ;none used here
+ 84:  
+ 85:  ;-------------------------------------------------------------------------------
+ 86:  ;           Interrupt Vectors
+ 87:  ;-------------------------------------------------------------------------------
+ 88:  
+ 89:  FFFE                               ORG     0xFFFE                  ; MSP430 RESET Vector
+ 90:  FFFE                               DW      RESET                   ; establishes the label RESET as 
+ 91:                                              ; the starting point
+ 92:                                              
+ 93:  ;-------------------------------------------------------------------------------                    94:                           
+ 95:  10000                               END                             ; END of all code for this program
+ 96:  ;-------------------------------------------------------------------------------
+ 97:  ;-------------------------------------------------------------------------------
+
+                               LIST OF SYMBOYS
+============================================================================
+SYMBOL                               TYPE                   VALUE
+----------------------------------------------------------------------------
+WDTCTL                               Constant               0x0120
+P1DIR                                Constant               0x0022
+P1OUT                                Constant               0x0021
+P1REN                                Constant               0x0027
+LoopCount                            DB                     0
+Count                                DB                     0
+BigVar                               Address                202
+RESET                                Address                C000
+StopWDT                              Address                C004
+SetupP1                              Address                C00A
+MainProgramStart                     Address                C01C
+Again                                Address                C022
+LoopTop                              Address                C026
+AgainA                               Address                C030
+LoopTopA                             Address                C034
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
+                                                            
