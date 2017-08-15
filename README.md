@@ -1,4 +1,5 @@
 Instruction set supported (target TI MSP430G2553)
+
 ADD, AND, BIC, BIS, BIT, CALL, CMP, DEC, INC, JZ, JNZ, MOV, RET, PUSH, POP, and SWPB instructions
 Addressing modes supported (byte and word)
 Register mode: Rn
